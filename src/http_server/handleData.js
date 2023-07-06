@@ -1,8 +1,9 @@
 import { handleUsers } from './handleUsers.js';
-import { handleRooms, handleSingleRoomPlay } from './handleRooms.js';
+import { updateExistingRooms } from './updateRooms.js';
 import { handleAddingShips } from './handleShips.js';
+import { createNewRoom } from './createNewRoom.js';
 import { handleAttaks } from './handleAttacks.js';
-import { updateRooms } from './updateRoom.js';
+import { createGame } from './createGame.js';
 import { rooms } from './db.js';
 
 export function handleData(data) {
@@ -15,14 +16,18 @@ export function handleData(data) {
       return returnedData;
     case 'create_room' || 'single_play':
       returnedData.length = 0;
-      returnedData.push(handleRooms(parsedData));
-      console.log(rooms);
-      returnedData.push(handleRooms(updateRooms(parsedData)));
+      returnedData.push(createNewRoom(parsedData));
       return returnedData;
-    case 'single_play':
+    case 'add_user_to_room':
       returnedData.length = 0;
-      returnedData.push(handleSingleRoomPlay(parsedData));
-      returnedData.push(handleRooms(updateRooms(parsedData)));
+      returnedData.push(updateExistingRooms(parsedData));
+      rooms.forEach((room) => {
+        if (room.roomUsers.length === 2) {
+          console.log(room.roomUsers.length);
+          returnedData.push(createGame(parsedData));
+        }
+      });
+
       return returnedData;
     case 'add_ships':
       returnedData.length = 0;
