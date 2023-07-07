@@ -2,7 +2,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as http from 'http';
 
-const WS_PORT = 8181;
+const HTTP_PORT = 3000;
 
 export const httpServer = http.createServer(function (req, res) {
   const __dirname = path.resolve(path.dirname(''));

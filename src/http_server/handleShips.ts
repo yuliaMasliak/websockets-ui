@@ -1,4 +1,4 @@
-export function handleAddingShips(parsedData) {
+export function handleAddingShips(parsedData: any) {
   const innerData = {
     ships: JSON.parse(parsedData.data).ships,
     currentPlayerIndex: parsedData.indexPlayer

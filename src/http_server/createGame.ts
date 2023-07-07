@@ -1,6 +1,7 @@
-import { games } from './db.js';
+import { User } from '../modules';
+import { games } from './db';
 
-export function createGame(user, i) {
+export function createGame(user: User, i: number) {
   const innerData = {
     idGame: games.length,
     idPlayer: user.index

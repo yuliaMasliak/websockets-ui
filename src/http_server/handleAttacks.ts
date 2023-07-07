@@ -1,11 +1,11 @@
-export function handleAttaks(parsedData) {
+export function handleAttaks(parsedData: any) {
   const innerData = {
     position: {
       x: JSON.parse(parsedData.data).x,
       y: JSON.parse(parsedData.data).y
     },
     currentPlayerIndex: parsedData.indexPlayer,
-    status: 'miss' | 'killed' | 'shot'
+    status: 'miss' || 'killed' || 'shot'
   };
   const newAttack = {
     type: 'attack',
