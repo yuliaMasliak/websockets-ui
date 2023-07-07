@@ -1,15 +1,16 @@
-import { users } from './db.js';
+import { games } from './db.js';
 
-export function createGame(parsedData) {
-  //   const innerData = {
-  //     idGame: parsedData.id,
-  //     idPlayer: users[users.length - 1].id
-  //   };
-  //   const newGame = {
-  //     type: 'create_game',
-  //     data: JSON.stringify(innerData),
-  //     id: parsedData.id
-  //   };
-  //   let dataToSend = JSON.stringify(newGame);
-  //   return dataToSend;
+export function createGame(user, i) {
+  const innerData = {
+    idGame: games.length,
+    idPlayer: user.index
+  };
+  const newGame = {
+    type: 'create_game',
+    data: JSON.stringify(innerData),
+    id: i
+  };
+
+  let dataToSend = JSON.stringify(newGame);
+  return dataToSend;
 }

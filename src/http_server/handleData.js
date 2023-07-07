@@ -4,7 +4,7 @@ import { handleAddingShips } from './handleShips.js';
 import { createNewRoom } from './createNewRoom.js';
 import { handleAttaks } from './handleAttacks.js';
 import { createGame } from './createGame.js';
-import { rooms } from './db.js';
+import { rooms, games } from './db.js';
 
 export function handleData(data) {
   const parsedData = JSON.parse(data);
@@ -23,8 +23,13 @@ export function handleData(data) {
       returnedData.push(updateExistingRooms(parsedData));
       rooms.forEach((room) => {
         if (room.roomUsers.length === 2) {
-          console.log(room.roomUsers.length);
-          returnedData.push(createGame(parsedData));
+          games.push(room.length);
+          console.log(room);
+          room.roomUsers.forEach((user, i) => {
+            console.log(user);
+            const startGame = createGame(user, i);
+            returnedData.push(startGame);
+          });
         }
       });
 

@@ -1,10 +1,16 @@
-import { getCurrentUser, rooms } from './db.js';
+import { currentUser, getCurrentUser, rooms } from './db.js';
 import { users } from './db.js';
 
 export function updateExistingRooms(parsedData) {
+  let addedUser = {};
+  users.forEach((user) => {
+    if (user.index === currentUser.index) {
+      addedUser = user;
+    }
+  });
   rooms.forEach((room) => {
     if (room.roomId === JSON.parse(parsedData.data).indexRoom) {
-      room.roomUsers = [...room.roomUsers, users[users.length - 1]];
+      room.roomUsers = [...room.roomUsers, addedUser];
     }
   });
 

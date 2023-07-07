@@ -3,6 +3,7 @@ export const rooms = [];
 export const usersCountInTheRoom = [];
 export let startGame = false;
 export let currentUser = {};
+export const games = [];
 
 export function getCurrentUser() {
   return currentUser;
