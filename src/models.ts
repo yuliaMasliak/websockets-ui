@@ -1,3 +1,5 @@
+import { WebSocket } from 'ws';
+
 export type User = {
   name: string;
   index: number;
@@ -12,8 +14,13 @@ export type UserData = {
   data: string;
   id: number;
 };
+export type ShipsData = {
+  id: number;
+  data: any;
+};
 export type RoomData = {
   type: string;
   data: string;
   id: number;
 };
+export type Connection = WebSocket & { userID: number };

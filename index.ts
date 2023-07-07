@@ -1,13 +1,13 @@
 import { handleData } from './src/http_server/handleData';
 import { WebSocketServer, WebSocket } from 'ws';
 import { users, rooms } from './src/http_server/db';
-import { User } from './src/modules';
-const connections: WebSocket[] = [];
+import { httpServer } from './src/http_server/index';
+import { Connection } from './src/models';
+let connections: Connection[] = [];
 
-export const wss = new WebSocketServer({ port: 3000 });
+export const wss = new WebSocketServer({ server: httpServer });
 
 wss.on('connection', function connection(ws: WebSocket & { userID: number }) {
-  connections.push(ws);
   ws.on('error', console.error);
 
   ws.on('message', function message(data: string) {
@@ -15,31 +15,47 @@ wss.on('connection', function connection(ws: WebSocket & { userID: number }) {
     const parsedData: any = JSON.parse(data);
     if (parsedData.type === 'reg') {
       const userName = JSON.parse(parsedData.data);
-      const innerData = {
+      const userDB = {
         name: JSON.stringify(userName.name),
-        index: users.length,
+        index: users.length + 1
+      };
+      ws.userID = userDB.index;
+      connections.push(ws);
+      users.push(userDB);
+
+      const innerData = {
+        name: userDB.name,
+        index: ws.userID,
         error: false,
         errorText: 'error'
       };
+      console.log(innerData);
       const newUser = {
         type: parsedData.type,
         data: JSON.stringify(innerData),
         id: parsedData.id
       };
-      const userDB = {
-        name: innerData.name,
-        index: innerData.index
-      };
-      users.push(userDB);
+
       const dataToSend = JSON.stringify(newUser);
-      ws.userID = userDB.index;
-      ws.send(dataToSend);
+      connections.forEach((connection) => {
+        if (connection.userID === ws.userID) {
+          connection.send(dataToSend);
+        }
+      });
     } else {
       if (data !== null) {
-        handleData(data, ws.userID)!.forEach((el) => {
-          connections.forEach((connection) => {
-            connection.send(el);
-          });
+        handleData(data, ws.userID)!.forEach((el: any) => {
+          if (el.id) {
+            connections.forEach((connection) => {
+              if (el.id === connection.userID) {
+                connection.send(el.data);
+              }
+            });
+          } else {
+            connections.forEach((connection) => {
+              connection.send(el);
+            });
+          }
         });
       }
     }

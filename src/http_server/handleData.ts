@@ -1,15 +1,14 @@
-import { handleUsers } from './handleUsers';
 import { updateExistingRooms } from './updateRooms';
-import { handleAddingShips } from './handleShips';
+import { handleStartGame } from './handleStartGame';
 import { createNewRoom } from './createNewRoom';
 import { handleAttaks } from './handleAttacks';
 import { createGame } from './createGame';
-import { rooms, games } from './db';
-import { User, UserData } from '../modules';
+import { rooms, games, placedShips } from './db';
 
 export function handleData(data: string, userID: number) {
   const parsedData: any = JSON.parse(data);
-  let returnedData = [];
+  let returnedData: any = [];
+
   switch (parsedData.type) {
     case 'create_room' || 'single_play':
       returnedData.length = 0;
@@ -26,18 +25,25 @@ export function handleData(data: string, userID: number) {
           });
         }
       });
-
       return returnedData;
     case 'add_ships':
       returnedData.length = 0;
-      returnedData.push(handleAddingShips(parsedData));
+      const userShips = {
+        id: userID,
+        data: parsedData
+      };
+      placedShips.push(userShips);
+      if (placedShips.length === 2) {
+        placedShips.forEach((userPlacedShips: any, i: number) => {
+          returnedData.push(handleStartGame(userPlacedShips, i));
+        });
+      }
       return returnedData;
     case 'attack':
       returnedData.length = 0;
-      returnedData.push(handleAttaks(parsedData));
+      returnedData.push(handleAttaks(parsedData, userID));
       return returnedData;
     default:
       break;
   }
-  function clearReturnedData() {}
 }

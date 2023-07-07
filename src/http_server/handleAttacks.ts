@@ -1,10 +1,10 @@
-export function handleAttaks(parsedData: any) {
+export function handleAttaks(parsedData: any, userID: number) {
   const innerData = {
     position: {
       x: JSON.parse(parsedData.data).x,
       y: JSON.parse(parsedData.data).y
     },
-    currentPlayerIndex: parsedData.indexPlayer,
+    currentPlayerIndex: userID,
     status: 'miss' || 'killed' || 'shot'
   };
   const newAttack = {

@@ -1,4 +1,4 @@
-import { RoomData, User } from '../modules';
+import { RoomData, User } from '../models';
 import { rooms, users } from './db';
 
 export function createNewRoom(parsedData: RoomData, userId: number) {
@@ -11,9 +11,6 @@ export function createNewRoom(parsedData: RoomData, userId: number) {
     rooms.push(newRoom);
   }
 
-  rooms.forEach((el) => {
-    console.log(el);
-  });
   const updatedRooms = {
     type: 'update_room',
     data: JSON.stringify(rooms),

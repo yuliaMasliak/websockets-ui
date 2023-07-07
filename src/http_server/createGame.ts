@@ -1,4 +1,4 @@
-import { User } from '../modules';
+import { User } from '../models';
 import { games } from './db';
 
 export function createGame(user: User, i: number) {
@@ -6,6 +6,8 @@ export function createGame(user: User, i: number) {
     idGame: games.length,
     idPlayer: user.index
   };
+  console.log(innerData);
+
   const newGame = {
     type: 'create_game',
     data: JSON.stringify(innerData),
