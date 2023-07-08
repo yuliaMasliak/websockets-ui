@@ -3,7 +3,13 @@ import { handleStartGame } from './handleStartGame';
 import { createNewRoom } from './createNewRoom';
 import { handleAttaks } from './handleAttacks';
 import { createGame } from './createGame';
-import { rooms, games, placedShips, allShipsData } from './db';
+import {
+  rooms,
+  games,
+  placedShips,
+  allShipsData,
+  currentShootStatus
+} from './db';
 import { handleTurn } from './handleTurn';
 import { Game } from '../models';
 import { createShipsData } from './createShipsData';
@@ -50,17 +56,18 @@ export function handleData(data: string, userID: number) {
       return returnedData;
     case 'attack':
       returnedData.length = 0;
-      returnedData.push(
-        handleAttaks(parsedData, userID),
-        handleTurn(parsedData)
-      );
+      returnedData.push(handleAttaks(parsedData, userID));
+      if (currentShootStatus === 'missed') {
+        returnedData.push(handleTurn(parsedData));
+      }
       return returnedData;
     case 'randomAttack':
       returnedData.length = 0;
-      returnedData.push(
-        handleAttaks(parsedData, userID),
-        handleTurn(parsedData)
-      );
+      returnedData.push(handleAttaks(parsedData, userID));
+
+      if (currentShootStatus === 'missed') {
+        returnedData.push(handleTurn(parsedData));
+      }
       return returnedData;
     default:
       break;

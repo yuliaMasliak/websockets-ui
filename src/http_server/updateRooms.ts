@@ -6,7 +6,9 @@ export function updateExistingRooms(parsedData: any, userId: number) {
   rooms.forEach((room) => {
     if (room.roomId === JSON.parse(parsedData.data).indexRoom) {
       if (user) {
-        room.roomUsers = [...room.roomUsers, user];
+        if (user.index !== room.roomUsers[0].index) {
+          room.roomUsers = [...room.roomUsers, user];
+        }
       }
     }
   });

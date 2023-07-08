@@ -13,3 +13,8 @@ export const allShipsData: {
   ownerId: number;
   ships: any[];
 }[] = [];
+export let currentShootStatus = 'missed';
+
+export function setCurrentShootStatus(value: string) {
+  currentShootStatus = value;
+}
