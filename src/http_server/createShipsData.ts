@@ -6,7 +6,6 @@ export function createShipsData(ships: ShipsData) {
     ownerId: ships.id,
     ships: []
   };
-  console.log(ships);
 
   ships.ships.forEach((position: any) => {
     const shipPosititons = [];

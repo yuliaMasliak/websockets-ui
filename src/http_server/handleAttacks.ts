@@ -4,15 +4,15 @@ import { handleShootStatus } from './handleShootStatus';
 
 export function handleAttaks(parsedData: any, userID: number) {
   let competitorsShips: [] = [];
-  let competitorsId: number = 0;
+  let competitorId: number = 0;
 
   placedShips.forEach((ships, i) => {
     if (ships.id === userID) {
       const copy = [...placedShips];
       copy.splice(i, 1);
-      competitorsShips = copy[0].ships;
-      competitorsId = copy[0].id;
-      console.log(competitorsShips);
+      // competitorsShips = copy[0].ships;
+      competitorId = copy[0].id;
+      // console.log(competitorsShips);
     }
   });
 
@@ -22,7 +22,7 @@ export function handleAttaks(parsedData: any, userID: number) {
       y: JSON.parse(parsedData.data).y
     },
     currentPlayerIndex: userID,
-    status: handleShootStatus(parsedData, competitorsShips)
+    status: handleShootStatus(competitorId, JSON.parse(parsedData.data))
   };
   const newAttack = {
     type: 'attack',
@@ -33,7 +33,7 @@ export function handleAttaks(parsedData: any, userID: number) {
 
   const dataToSend = JSON.stringify(newAttack);
   const res = {
-    id: competitorsId,
+    id: competitorId,
     data: dataToSend
   };
   return res;

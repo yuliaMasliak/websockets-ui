@@ -41,12 +41,6 @@ export function handleData(data: string, userID: number) {
       };
       placedShips.push(userShips);
       allShipsData.push(createShipsData(userShips));
-      allShipsData.forEach((el) => [
-        el.ships.forEach((elem) => {
-          console.log(elem);
-        })
-      ]);
-      console.log(allShipsData);
 
       if (placedShips.length === 2) {
         placedShips.forEach((userPlacedShips: any, i: number) => {
