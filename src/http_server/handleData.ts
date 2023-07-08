@@ -8,7 +8,8 @@ import {
   games,
   placedShips,
   allShipsData,
-  currentShootStatus
+  currentShootStatus,
+  turnUserId
 } from './db';
 import { handleTurn } from './handleTurn';
 import { Game } from '../models';
@@ -52,15 +53,19 @@ export function handleData(data: string, userID: number) {
         placedShips.forEach((userPlacedShips: any, i: number) => {
           returnedData.push(handleStartGame(userPlacedShips, i));
         });
+        returnedData.push(handleTurn(parsedData));
       }
       return returnedData;
     case 'attack':
       returnedData.length = 0;
-      returnedData.push(handleAttaks(parsedData, userID));
-      if (currentShootStatus === 'missed') {
-        returnedData.push(handleTurn(parsedData));
+      if (turnUserId === userID) {
+        returnedData.push(handleAttaks(parsedData, userID));
+        if (currentShootStatus === 'missed') {
+          returnedData.push(handleTurn(parsedData));
+        }
       }
       return returnedData;
+
     case 'randomAttack':
       returnedData.length = 0;
       returnedData.push(handleAttaks(parsedData, userID));

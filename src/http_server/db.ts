@@ -9,6 +9,7 @@ export let startGame = false;
 
 export const games: Game[] = [];
 export const turns: number[] = [];
+export let turnUserId: number;
 export const allShipsData: {
   ownerId: number;
   ships: any[];
@@ -17,4 +18,7 @@ export let currentShootStatus = 'missed';
 
 export function setCurrentShootStatus(value: string) {
   currentShootStatus = value;
+}
+export function setTurnUserId(value: number) {
+  turnUserId = value;
 }

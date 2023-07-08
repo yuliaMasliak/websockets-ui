@@ -1,18 +1,15 @@
-import { Position, ShipsData } from '../models';
-import { placedShips, turns } from './db';
+import { placedShips, turns, turnUserId } from './db';
 import { handleShootStatus } from './handleShootStatus';
 
 export function handleAttaks(parsedData: any, userID: number) {
-  let competitorsShips: [] = [];
   let competitorId: number = 0;
 
   placedShips.forEach((ships, i) => {
     if (ships.id === userID) {
       const copy = [...placedShips];
       copy.splice(i, 1);
-      // competitorsShips = copy[0].ships;
+
       competitorId = copy[0].id;
-      // console.log(competitorsShips);
     }
   });
 

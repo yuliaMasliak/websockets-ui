@@ -1,4 +1,4 @@
-import { turns, games } from './db';
+import { turns, games, setTurnUserId } from './db';
 
 export function handleTurn(prsedData: any) {
   const currentGameID = JSON.parse(prsedData.data).gameId;
@@ -12,6 +12,7 @@ export function handleTurn(prsedData: any) {
           const usersCopy = [...game.users];
           usersCopy.splice(i, 1);
           nextUserAttack = usersCopy[0].index;
+          setTurnUserId(nextUserAttack);
         }
       });
     }
