@@ -3,7 +3,10 @@ import { handleStartGame } from './handleStartGame';
 import { createNewRoom } from './createNewRoom';
 import { handleAttaks } from './handleAttacks';
 import { createGame } from './createGame';
-import { rooms, games, placedShips } from './db';
+import { rooms, games, placedShips, allShipsData } from './db';
+import { handleTurn } from './handleTurn';
+import { Game } from '../models';
+import { createShipsData } from './createShipsData';
 
 export function handleData(data: string, userID: number) {
   const parsedData: any = JSON.parse(data);
@@ -19,7 +22,11 @@ export function handleData(data: string, userID: number) {
       returnedData.push(updateExistingRooms(parsedData, userID));
       rooms.forEach((room) => {
         if (room.roomUsers.length === 2) {
-          games.push(room.roomUsers.length);
+          const game: Game = {
+            gameId: room.roomId,
+            users: room.roomUsers
+          };
+          games.push(game);
           room.roomUsers.forEach((user, i) => {
             returnedData.push(createGame(user, i));
           });
@@ -30,9 +37,17 @@ export function handleData(data: string, userID: number) {
       returnedData.length = 0;
       const userShips = {
         id: userID,
-        data: parsedData
+        ships: JSON.parse(parsedData.data).ships
       };
       placedShips.push(userShips);
+      allShipsData.push(createShipsData(userShips));
+      allShipsData.forEach((el) => [
+        el.ships.forEach((elem) => {
+          console.log(elem);
+        })
+      ]);
+      console.log(allShipsData);
+
       if (placedShips.length === 2) {
         placedShips.forEach((userPlacedShips: any, i: number) => {
           returnedData.push(handleStartGame(userPlacedShips, i));
@@ -41,7 +56,17 @@ export function handleData(data: string, userID: number) {
       return returnedData;
     case 'attack':
       returnedData.length = 0;
-      returnedData.push(handleAttaks(parsedData, userID));
+      returnedData.push(
+        handleAttaks(parsedData, userID),
+        handleTurn(parsedData)
+      );
+      return returnedData;
+    case 'randomAttack':
+      returnedData.length = 0;
+      returnedData.push(
+        handleAttaks(parsedData, userID),
+        handleTurn(parsedData)
+      );
       return returnedData;
     default:
       break;

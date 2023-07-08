@@ -8,7 +8,10 @@ export type Room = {
   roomId: number;
   roomUsers: [] | User[];
 };
-
+export type Game = {
+  gameId: number;
+  users: [] | User[];
+};
 export type UserData = {
   type: string;
   data: string;
@@ -16,7 +19,7 @@ export type UserData = {
 };
 export type ShipsData = {
   id: number;
-  data: any;
+  ships: any;
 };
 export type RoomData = {
   type: string;
@@ -24,3 +27,7 @@ export type RoomData = {
   id: number;
 };
 export type Connection = WebSocket & { userID: number };
+export type Position = {
+  x: number;
+  y: number;
+};

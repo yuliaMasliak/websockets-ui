@@ -29,7 +29,7 @@ wss.on('connection', function connection(ws: WebSocket & { userID: number }) {
         error: false,
         errorText: 'error'
       };
-      console.log(innerData);
+
       const newUser = {
         type: parsedData.type,
         data: JSON.stringify(innerData),

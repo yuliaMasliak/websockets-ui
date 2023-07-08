@@ -2,7 +2,7 @@ import { ShipsData } from '../models';
 
 export function handleStartGame(userShips: ShipsData, i: number) {
   const innerData = {
-    ships: JSON.parse(userShips.data.data).ships,
+    ships: userShips.ships,
     currentPlayerIndex: userShips.id
   };
   const startGame = {
@@ -12,6 +12,9 @@ export function handleStartGame(userShips: ShipsData, i: number) {
   };
 
   const dataToSend = JSON.stringify(startGame);
-
-  return dataToSend;
+  const res = {
+    id: userShips.id,
+    data: dataToSend
+  };
+  return res;
 }

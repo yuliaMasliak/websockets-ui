@@ -1,5 +1,5 @@
 import { User } from '../models';
-import { rooms, users } from './db';
+import { rooms, users, games } from './db';
 
 export function updateExistingRooms(parsedData: any, userId: number) {
   const user = users.find((user) => user.index === userId);

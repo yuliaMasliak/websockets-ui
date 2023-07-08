@@ -1,12 +1,11 @@
-import { User } from '../models';
-import { games } from './db';
+import { Game, User } from '../models';
+import { games, rooms } from './db';
 
 export function createGame(user: User, i: number) {
   const innerData = {
     idGame: games.length,
     idPlayer: user.index
   };
-  console.log(innerData);
 
   const newGame = {
     type: 'create_game',
