@@ -39,21 +39,27 @@ wss.on('connection', function connection(ws: WebSocket & { userID: number }) {
           connection.send(JSON.stringify(newUser));
         }
       });
+      console.log(`Registered successfully`);
     } else {
-      if (data !== null) {
-        handleData(data, ws.userID).forEach((el: any) => {
-          if (el.playerId) {
-            connections.forEach((connection) => {
-              if (el.playerId === connection.userID) {
-                connection.send(el.data);
-              }
-            });
-          } else {
-            connections.forEach((connection) => {
-              connection.send(el);
-            });
-          }
-        });
+      try {
+        if (data !== null) {
+          handleData(data, ws.userID).forEach((el: any) => {
+            if (el.playerId) {
+              connections.forEach((connection) => {
+                if (el.playerId === connection.userID) {
+                  connection.send(el.data);
+                }
+              });
+            } else {
+              connections.forEach((connection) => {
+                connection.send(el);
+              });
+            }
+          });
+          console.log(`Command fulfilled successfully`);
+        }
+      } catch (err) {
+        console.log('Single play was not implemented');
       }
     }
   });

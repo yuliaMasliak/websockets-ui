@@ -22,7 +22,7 @@ export function handleData(data: string, userID: number) {
   let returnedData: any = [];
 
   switch (parsedData.type) {
-    case 'create_room' || 'single_play':
+    case 'create_room':
       returnedData.length = 0;
       returnedData.push(createNewRoom(parsedData, userID));
       return returnedData;
