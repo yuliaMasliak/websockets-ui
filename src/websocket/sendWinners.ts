@@ -2,8 +2,6 @@ import { usersData } from './db';
 
 export function sendUpdatedWinners() {
   let innerData: any = [];
-  console.log(usersData);
-
   usersData.forEach((user) => {
     const obj = {
       name: user.name,

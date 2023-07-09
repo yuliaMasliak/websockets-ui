@@ -67,8 +67,19 @@ wss.on('connection', function connection(ws: WebSocket & { userID: number }) {
   });
 
   ws.on('close', function () {
-    rooms.length = 0;
-    users.length = 0;
+    rooms.forEach((room) => {
+      room.roomUsers.forEach((user, i) => {
+        if (user.index === ws.userID) {
+          room.roomUsers.splice(i, 1);
+        }
+      });
+    });
+    users.forEach((user, i) => {
+      if (user.index === ws.userID) {
+        users.splice(i, 1);
+      }
+    });
+
     setCommectionsCout(connectionCount - 1);
     console.log('connection closed');
   });

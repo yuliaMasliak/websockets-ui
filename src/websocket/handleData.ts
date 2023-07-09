@@ -30,6 +30,8 @@ export function handleData(data: string, userID: number) {
     case 'add_user_to_room':
       returnedData.length = 0;
       returnedData.push(updateExistingRooms(parsedData, userID));
+      console.log(rooms);
+
       rooms.forEach((room) => {
         if (room.roomUsers.length === 2) {
           const game: Game = {
