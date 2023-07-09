@@ -4,13 +4,13 @@ import { createNewRoom } from './createNewRoom';
 import { handleAttaks } from './handleAttacks';
 import { createGame } from './createGame';
 import {
-  rooms,
   games,
   placedShips,
   allShipsData,
   currentShootStatus,
   turnUserId
-} from './db';
+} from './variables';
+import { rooms } from './db';
 import { handleTurn } from './handleTurn';
 import { Game } from '../models';
 import { createShipsData } from './createShipsData';

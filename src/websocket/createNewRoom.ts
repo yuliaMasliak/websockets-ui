@@ -1,5 +1,6 @@
 import { RoomData } from '../models';
-import { rooms, users } from './db';
+import { users } from './variables';
+import { rooms } from './db';
 
 export function createNewRoom(parsedData: RoomData, userId: number) {
   const user = users.find((user) => user.index === userId);

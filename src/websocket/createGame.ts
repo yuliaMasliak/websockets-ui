@@ -1,5 +1,5 @@
-import { Game, User } from '../models';
-import { games, rooms } from './db';
+import { User } from '../models';
+import { games } from './variables';
 
 export function createGame(user: User, i: number) {
   const innerData = {

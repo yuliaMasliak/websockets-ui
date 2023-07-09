@@ -2,6 +2,7 @@ import { WebSocket } from 'ws';
 
 export type User = {
   name: string;
+  passwod?: string;
   index: number;
 };
 export type Room = {

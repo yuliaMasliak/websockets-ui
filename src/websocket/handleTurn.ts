@@ -1,4 +1,4 @@
-import { turns, games, setTurnUserId } from './db';
+import { turns, games, setTurnUserId } from './variables';
 
 export function handleTurn(prsedData: any) {
   const currentGameID = JSON.parse(prsedData.data).gameId;

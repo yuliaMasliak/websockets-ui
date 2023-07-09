@@ -1,5 +1,5 @@
 import { Position } from '../models';
-import { allShipsData, setCurrentShootStatus } from './db';
+import { allShipsData, setCurrentShootStatus } from './variables';
 
 export function handleShootStatus(
   competitorId: number,
