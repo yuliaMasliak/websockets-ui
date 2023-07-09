@@ -66,13 +66,14 @@ export function handleData(data: string, userID: number) {
         }
       }
 
-      allShipsData.forEach((player) => {
+      allShipsData.forEach((player, i) => {
         if (
           player.ships.every((ship) => {
             return ship.length === 0;
           })
         ) {
-          returnedData.push(handleWinner(player.ownerId));
+          allShipsData.splice(i, 1);
+          returnedData.push(handleWinner(allShipsData[0].ownerId));
         }
       });
 

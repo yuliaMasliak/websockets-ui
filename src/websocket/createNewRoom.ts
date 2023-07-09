@@ -1,4 +1,4 @@
-import { RoomData, User } from '../models';
+import { RoomData } from '../models';
 import { rooms, users } from './db';
 
 export function createNewRoom(parsedData: RoomData, userId: number) {

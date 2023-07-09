@@ -1,5 +1,3 @@
-import { allShipsData } from './db';
-
 export function handleWinner(winnerID: number) {
   const innerData = {
     winPlayer: winnerID

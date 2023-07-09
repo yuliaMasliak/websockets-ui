@@ -1,4 +1,4 @@
-import { users } from './db';
+import { users } from '../websocket/db';
 import { UserData } from '../models';
 
 export function handleUsers(parsedData: UserData) {
@@ -11,7 +11,6 @@ export function handleUsers(parsedData: UserData) {
     error: false,
     errorText: 'error'
   };
-  console.log(innerData);
 
   const newUser = {
     type: parsedData.type,

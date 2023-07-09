@@ -1,6 +1,6 @@
-import { handleData } from './src/http_server/handleData';
+import { handleData } from './src/websocket/handleData';
 import { WebSocketServer, WebSocket } from 'ws';
-import { users, rooms } from './src/http_server/db';
+import { users, rooms } from './src/websocket/db';
 import { httpServer } from './src/http_server/index';
 import { Connection } from './src/models';
 let connections: Connection[] = [];

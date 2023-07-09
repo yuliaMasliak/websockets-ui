@@ -1,4 +1,4 @@
-import { placedShips, turns, turnUserId } from './db';
+import { placedShips, turns } from './db';
 import { handleShootStatus } from './handleShootStatus';
 
 export function handleAttaks(parsedData: any, userID: number) {
