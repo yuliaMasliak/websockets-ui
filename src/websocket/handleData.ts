@@ -15,6 +15,7 @@ import { handleTurn } from './handleTurn';
 import { Game } from '../models';
 import { createShipsData } from './createShipsData';
 import { handleWinner } from './handleWinner';
+import { clearRooms } from './clearRoom';
 
 export function handleData(data: string, userID: number) {
   const parsedData: any = JSON.parse(data);
@@ -65,7 +66,6 @@ export function handleData(data: string, userID: number) {
           returnedData.push(handleTurn(parsedData));
         }
       }
-
       allShipsData.forEach((player, i) => {
         if (
           player.ships.every((ship) => {
@@ -74,6 +74,8 @@ export function handleData(data: string, userID: number) {
         ) {
           allShipsData.splice(i, 1);
           returnedData.push(handleWinner(allShipsData[0].ownerId));
+          rooms.length = 0;
+          returnedData.push(clearRooms());
         }
       });
 
