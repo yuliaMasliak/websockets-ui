@@ -11,7 +11,8 @@ export function handleUsers(parsedData: UserData) {
   const userDB = {
     name: JSON.stringify(userName.name),
     password: JSON.stringify(userName.password),
-    index: users.length + 1
+    index: users.length + 1,
+    wins: 0
   };
 
   users.push(user);

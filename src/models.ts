@@ -2,8 +2,14 @@ import { WebSocket } from 'ws';
 
 export type User = {
   name: string;
-  passwod?: string;
+
   index: number;
+};
+export type UserInDB = {
+  name: string;
+  password: string;
+  index: number;
+  wins: number;
 };
 export type Room = {
   roomId: number;

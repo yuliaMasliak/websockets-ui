@@ -16,6 +16,7 @@ import { Game } from '../models';
 import { createShipsData } from './createShipsData';
 import { handleWinner } from './handleWinner';
 import { clearRooms } from './clearRoom';
+import { updateWinners } from './updateWinners';
 
 export function handleData(data: string, userID: number) {
   const parsedData: any = JSON.parse(data);
@@ -73,6 +74,7 @@ export function handleData(data: string, userID: number) {
           })
         ) {
           allShipsData.splice(i, 1);
+          updateWinners(allShipsData[0].ownerId);
           returnedData.push(handleWinner(allShipsData[0].ownerId));
           rooms.length = 0;
           returnedData.push(clearRooms());

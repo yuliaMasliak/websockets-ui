@@ -1,4 +1,4 @@
-import { Room, User } from '../models';
+import { Room, UserInDB } from '../models';
 
-export const usersData: User[] = [];
+export const usersData: UserInDB[] = [];
 export const rooms: Room[] = [];

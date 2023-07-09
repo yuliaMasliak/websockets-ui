@@ -9,6 +9,7 @@ import { rooms } from './src/websocket/db';
 import { httpServer } from './src/http_server/index';
 import { Connection } from './src/models';
 import { handleUsers } from './src/websocket/handleUsers';
+import { sendUpdatedWinners } from './src/websocket/sendWinners';
 let connections: Connection[] = [];
 
 export const wss = new WebSocketServer({ server: httpServer });
@@ -53,6 +54,7 @@ wss.on('connection', function connection(ws: WebSocket & { userID: number }) {
             } else {
               connections.forEach((connection) => {
                 connection.send(el);
+                connection.send(sendUpdatedWinners());
               });
             }
           });
