@@ -8,7 +8,6 @@ export function handleAttaks(parsedData: any, userID: number) {
     if (ships.id === userID) {
       const copy = [...placedShips];
       copy.splice(i, 1);
-
       competitorId = copy[0].id;
     }
   });
@@ -30,7 +29,7 @@ export function handleAttaks(parsedData: any, userID: number) {
 
   const dataToSend = JSON.stringify(newAttack);
   const res = {
-    id: competitorId,
+    playerId: competitorId,
     data: dataToSend
   };
   return res;

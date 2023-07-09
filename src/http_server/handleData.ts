@@ -14,6 +14,7 @@ import {
 import { handleTurn } from './handleTurn';
 import { Game } from '../models';
 import { createShipsData } from './createShipsData';
+import { handleWinner } from './handleWinner';
 
 export function handleData(data: string, userID: number) {
   const parsedData: any = JSON.parse(data);
@@ -64,6 +65,17 @@ export function handleData(data: string, userID: number) {
           returnedData.push(handleTurn(parsedData));
         }
       }
+
+      allShipsData.forEach((player) => {
+        if (
+          player.ships.every((ship) => {
+            return ship.length === 0;
+          })
+        ) {
+          returnedData.push(handleWinner(player.ownerId));
+        }
+      });
+
       return returnedData;
 
     case 'randomAttack':

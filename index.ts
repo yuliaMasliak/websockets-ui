@@ -44,10 +44,10 @@ wss.on('connection', function connection(ws: WebSocket & { userID: number }) {
       });
     } else {
       if (data !== null) {
-        handleData(data, ws.userID)!.forEach((el: any) => {
-          if (el.id) {
+        handleData(data, ws.userID).forEach((el: any) => {
+          if (el.playerId) {
             connections.forEach((connection) => {
-              if (el.id === connection.userID) {
+              if (el.playerId === connection.userID) {
                 connection.send(el.data);
               }
             });
@@ -64,6 +64,6 @@ wss.on('connection', function connection(ws: WebSocket & { userID: number }) {
   ws.on('close', function () {
     rooms.length = 0;
     users.length = 0;
-    console.log('соединение закрыто ');
+    console.log('connection closed');
   });
 });

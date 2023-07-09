@@ -15,7 +15,7 @@ export function createGame(user: User, i: number) {
 
   let dataToSend = JSON.stringify(newGame);
   const res = {
-    id: innerData.idPlayer,
+    playerId: innerData.idPlayer,
     data: dataToSend
   };
   return res;

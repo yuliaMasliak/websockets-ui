@@ -1,4 +1,4 @@
-import { Position, ShipsData } from '../models';
+import { ShipsData } from '../models';
 
 export function createShipsData(ships: ShipsData) {
   let result: any = [];

@@ -13,7 +13,7 @@ export function handleStartGame(userShips: ShipsData, i: number) {
 
   const dataToSend = JSON.stringify(startGame);
   const res = {
-    id: userShips.id,
+    playerId: userShips.id,
     data: dataToSend
   };
   return res;

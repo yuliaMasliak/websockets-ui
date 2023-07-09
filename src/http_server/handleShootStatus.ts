@@ -7,15 +7,22 @@ export function handleShootStatus(
 ): string {
   let result = 'missed';
   const competotrShips = allShipsData.find((el) => el.ownerId == competitorId);
-
-  competotrShips!.ships.forEach((position) => {
-    position.forEach((pos: Position, i: number) => {
-      if (pos.x === shotPosition.x && pos.y === shotPosition.y) {
-        position.splice(i, 1);
-        result = position.length == 0 ? 'killed' : 'shoot';
-      }
+  if (competotrShips) {
+    competotrShips.ships.forEach((ship, index) => {
+      ship.forEach((pos: Position, i: number) => {
+        if (pos.x === shotPosition.x && pos.y === shotPosition.y) {
+          ship.splice(i, 1);
+          if (ship.length === 0) {
+            result = 'killed';
+          } else if (ship.length !== 0) {
+            result = 'shoot';
+          }
+        }
+      });
     });
-  });
+  }
+
   setCurrentShootStatus(result);
+
   return result;
 }

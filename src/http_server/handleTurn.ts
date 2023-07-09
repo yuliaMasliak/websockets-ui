@@ -28,6 +28,6 @@ export function handleTurn(prsedData: any) {
   };
 
   const dataToSend = JSON.stringify(newTurn);
-  console.log(dataToSend);
+
   return dataToSend;
 }
