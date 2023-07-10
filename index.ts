@@ -10,6 +10,7 @@ import { httpServer } from './src/http_server/index';
 import { Connection } from './src/models';
 import { handleUsers } from './src/websocket/handleUsers';
 import { sendUpdatedWinners } from './src/websocket/sendWinners';
+import { updateExistingRooms } from './src/websocket/updateRooms';
 let connections: Connection[] = [];
 
 export const wss = new WebSocketServer({ server: httpServer });
@@ -39,6 +40,7 @@ wss.on('connection', function connection(ws: WebSocket & { userID: number }) {
         if (connection.userID === ws.userID) {
           connection.send(JSON.stringify(newUser));
         }
+        connection.send(updateExistingRooms());
       });
       console.log(`Registered successfully`);
     } else {
