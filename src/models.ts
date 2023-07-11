@@ -35,6 +35,7 @@ export type RoomData = {
 };
 export type Connection = WebSocket & { userID: number };
 export type Position = {
+  state: string;
   x: number;
   y: number;
 };

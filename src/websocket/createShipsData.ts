@@ -12,6 +12,7 @@ export function createShipsData(ships: ShipsData) {
     if (position.direction === true) {
       for (let i = 0; i < position.length; i++) {
         const pos = {
+          state: 'alive',
           x: position.position.x,
           y: position.position.y + i
         };

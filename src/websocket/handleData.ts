@@ -14,11 +14,14 @@ import {
 } from './variables';
 import { rooms } from './db';
 import { handleTurn } from './handleTurn';
-import { Game } from '../models';
+import { Game, Position } from '../models';
 import { createShipsData } from './createShipsData';
 import { handleWinner } from './handleWinner';
 import { clearRooms } from './clearRoom';
 import { updateWinners } from './updateWinners';
+import { isKilledShip } from './isKilled';
+import { getNeighbourCells } from './getNeighbourCells';
+import { handleNeighbourCellsOpen } from './handleNeighbourCellsOpen';
 
 export function handleData(data: string, userID: number) {
   const parsedData: any = JSON.parse(data);
@@ -63,22 +66,31 @@ export function handleData(data: string, userID: number) {
       return returnedData;
     case 'attack':
       returnedData.length = 0;
-      let isRandom = false;
+      isKilledShip.setIsKilled(false);
       if (turnUserId === userID) {
         returnedData.push(handleAttaks(parsedData, userID, getIsRandom()));
+        getNeighbourCells(isKilledShip.getIsKilled()).forEach((pos, i) => {
+          returnedData.push(
+            handleNeighbourCellsOpen(pos, i, allShipsData[0].ownerId)
+          );
+        });
         if (currentShootStatus === 'miss') {
+          isKilledShip.setIsKilled(false);
           returnedData.push(handleTurn(parsedData));
         }
       }
       allShipsData.forEach((player, i) => {
         if (
           player.ships.every((ship) => {
-            return ship.length === 0;
+            return ship.every((pos: Position) => {
+              return pos.state === 'dead';
+            });
           })
         ) {
           allShipsData.splice(i, 1);
           updateWinners(allShipsData[0].ownerId);
           returnedData.push(handleWinner(allShipsData[0].ownerId));
+
           rooms.length = 0;
           returnedData.push(clearRooms());
         }

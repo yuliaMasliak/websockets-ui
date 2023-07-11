@@ -15,7 +15,10 @@ export const allShipsData: {
 }[] = [];
 export let currentShootStatus = 'miss';
 export let connectionCount: number = 0;
+
 export let isRandomAttack: boolean = false;
+export let isKilled: boolean = false;
+
 export function setIsRandom(value: boolean) {
   isRandomAttack = value;
 }
