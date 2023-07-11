@@ -1,4 +1,4 @@
-import { Room, User, ShipsData, Game, Connection } from '../models';
+import { User, ShipsData, Game, Connection } from '../models';
 
 export const users: User[] = [];
 
@@ -13,9 +13,15 @@ export const allShipsData: {
   ownerId: number;
   ships: any[];
 }[] = [];
-export let currentShootStatus = 'missed';
+export let currentShootStatus = 'miss';
 export let connectionCount: number = 0;
-
+export let isRandomAttack: boolean = false;
+export function setIsRandom(value: boolean) {
+  isRandomAttack = value;
+}
+export function getIsRandom() {
+  return isRandomAttack;
+}
 export function setCurrentShootStatus(value: string) {
   currentShootStatus = value;
 }

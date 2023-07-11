@@ -5,7 +5,7 @@ export function handleShootStatus(
   competitorId: number,
   shotPosition: Position
 ): string {
-  let result = 'missed';
+  let result = 'miss';
   const competotrShips = allShipsData.find((el) => el.ownerId == competitorId);
   if (competotrShips) {
     competotrShips.ships.forEach((ship) => {
@@ -15,7 +15,7 @@ export function handleShootStatus(
           if (ship.length === 0) {
             result = 'killed';
           } else if (ship.length !== 0) {
-            result = 'shoot';
+            result = 'shot';
           }
         }
       });

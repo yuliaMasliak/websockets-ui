@@ -8,7 +8,9 @@ import {
   placedShips,
   allShipsData,
   currentShootStatus,
-  turnUserId
+  turnUserId,
+  setIsRandom,
+  getIsRandom
 } from './variables';
 import { rooms } from './db';
 import { handleTurn } from './handleTurn';
@@ -61,9 +63,10 @@ export function handleData(data: string, userID: number) {
       return returnedData;
     case 'attack':
       returnedData.length = 0;
+      let isRandom = false;
       if (turnUserId === userID) {
-        returnedData.push(handleAttaks(parsedData, userID));
-        if (currentShootStatus === 'missed') {
+        returnedData.push(handleAttaks(parsedData, userID, getIsRandom()));
+        if (currentShootStatus === 'miss') {
           returnedData.push(handleTurn(parsedData));
         }
       }
@@ -85,9 +88,10 @@ export function handleData(data: string, userID: number) {
 
     case 'randomAttack':
       returnedData.length = 0;
-      returnedData.push(handleAttaks(parsedData, userID));
+      setIsRandom(true);
+      returnedData.push(handleAttaks(parsedData, userID, getIsRandom()));
 
-      if (currentShootStatus === 'missed') {
+      if (currentShootStatus === 'miss') {
         returnedData.push(handleTurn(parsedData));
       }
       return returnedData;

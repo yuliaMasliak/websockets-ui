@@ -1,7 +1,7 @@
 import { placedShips, turns } from './variables';
 import { handleShootStatus } from './handleShootStatus';
 
-export function handleAttaks(parsedData: any, userID: number) {
+export function handleAttaks(parsedData: any, userID: number, random: boolean) {
   let competitorId: number = 0;
 
   placedShips.forEach((ships, i) => {
@@ -11,8 +11,7 @@ export function handleAttaks(parsedData: any, userID: number) {
       competitorId = copy[0].id;
     }
   });
-
-  const innerData = {
+  let innerData = {
     position: {
       x: JSON.parse(parsedData.data).x,
       y: JSON.parse(parsedData.data).y
@@ -20,6 +19,10 @@ export function handleAttaks(parsedData: any, userID: number) {
     currentPlayer: userID,
     status: handleShootStatus(competitorId, JSON.parse(parsedData.data))
   };
+  if (random) {
+    innerData.position.x = Math.floor(Math.random() * 10);
+    innerData.position.y = Math.floor(Math.random() * 10);
+  }
 
   const newAttack = {
     type: 'attack',
