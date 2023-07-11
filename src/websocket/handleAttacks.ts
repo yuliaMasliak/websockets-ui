@@ -20,8 +20,14 @@ export function handleAttaks(parsedData: any, userID: number, random: boolean) {
     status: handleShootStatus(competitorId, JSON.parse(parsedData.data))
   };
   if (random) {
-    innerData.position.x = Math.floor(Math.random() * 10);
-    innerData.position.y = Math.floor(Math.random() * 10);
+    const data = {
+      x: Math.floor(Math.random() * 10),
+      y: Math.floor(Math.random() * 10),
+      state: 'alive'
+    };
+    innerData.position.x = data.x;
+    innerData.position.y = data.y;
+    innerData.status = handleShootStatus(competitorId, data);
   }
 
   const newAttack = {

@@ -90,7 +90,11 @@ export function handleData(data: string, userID: number) {
           allShipsData.splice(i, 1);
           updateWinners(allShipsData[0].ownerId);
           returnedData.push(handleWinner(allShipsData[0].ownerId));
-
+          getNeighbourCells(isKilledShip.getIsKilled()).forEach((pos, i) => {
+            returnedData.push(
+              handleNeighbourCellsOpen(pos, i, allShipsData[0].ownerId)
+            );
+          });
           rooms.length = 0;
           returnedData.push(clearRooms());
         }
@@ -101,11 +105,36 @@ export function handleData(data: string, userID: number) {
     case 'randomAttack':
       returnedData.length = 0;
       setIsRandom(true);
+      isKilledShip.setIsKilled(false);
       returnedData.push(handleAttaks(parsedData, userID, getIsRandom()));
 
       if (currentShootStatus === 'miss') {
         returnedData.push(handleTurn(parsedData));
       }
+      if (currentShootStatus === 'miss') {
+        isKilledShip.setIsKilled(false);
+        returnedData.push(handleTurn(parsedData));
+      }
+      allShipsData.forEach((player, i) => {
+        if (
+          player.ships.every((ship) => {
+            return ship.every((pos: Position) => {
+              return pos.state === 'dead';
+            });
+          })
+        ) {
+          allShipsData.splice(i, 1);
+          updateWinners(allShipsData[0].ownerId);
+          returnedData.push(handleWinner(allShipsData[0].ownerId));
+          getNeighbourCells(isKilledShip.getIsKilled()).forEach((pos, i) => {
+            returnedData.push(
+              handleNeighbourCellsOpen(pos, i, allShipsData[0].ownerId)
+            );
+          });
+          rooms.length = 0;
+          returnedData.push(clearRooms());
+        }
+      });
       return returnedData;
     default:
       break;
