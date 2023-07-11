@@ -11,6 +11,7 @@ import { Connection } from './src/models';
 import { handleUsers } from './src/websocket/handleUsers';
 import { sendUpdatedWinners } from './src/websocket/sendWinners';
 import { updateExistingRooms } from './src/websocket/updateRooms';
+import { validateUser } from './src/websocket/validateUser';
 let connections: Connection[] = [];
 
 export const wss = new WebSocketServer({ server: httpServer });
@@ -28,21 +29,27 @@ wss.on('connection', function connection(ws: WebSocket & { userID: number }) {
 
     const parsedData: any = JSON.parse(data);
     if (parsedData.type === 'reg') {
-      const innerData = handleUsers(parsedData);
-      ws.userID = innerData.index;
-      connections.push(ws);
-      const newUser = {
-        type: parsedData.type,
-        data: JSON.stringify(innerData),
-        id: parsedData.id
-      };
-      connections.forEach((connection) => {
-        if (connection.userID === ws.userID) {
-          connection.send(JSON.stringify(newUser));
-        }
-        connection.send(updateExistingRooms());
-      });
-      console.log(`Registered successfully`);
+      if (validateUser(parsedData)) {
+        const innerData = handleUsers(parsedData);
+        ws.userID = innerData.index;
+        connections.push(ws);
+        const newUser = {
+          type: parsedData.type,
+          data: JSON.stringify(innerData),
+          id: parsedData.id
+        };
+        connections.forEach((connection) => {
+          if (connection.userID === ws.userID) {
+            connection.send(JSON.stringify(newUser));
+          }
+          connection.send(updateExistingRooms());
+        });
+        console.log(`Registered successfully`);
+      } else {
+        console.log(
+          `User with such name already exist, but the entered password is wrong`
+        );
+      }
     } else {
       try {
         if (data !== null) {
