@@ -3,7 +3,9 @@ import { users } from './variables';
 import { rooms } from './db';
 
 export function createNewRoom(parsedData: RoomData, userId: number) {
-  const user = users.find((user) => user.index === userId);
+  const user = users.find((user) => {
+    return user.index === userId;
+  });
   if (user) {
     const newRoom = {
       roomId: rooms.length + 1,

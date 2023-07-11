@@ -8,7 +8,7 @@ export function handleShootStatus(
   let result = 'missed';
   const competotrShips = allShipsData.find((el) => el.ownerId == competitorId);
   if (competotrShips) {
-    competotrShips.ships.forEach((ship, index) => {
+    competotrShips.ships.forEach((ship) => {
       ship.forEach((pos: Position, i: number) => {
         if (pos.x === shotPosition.x && pos.y === shotPosition.y) {
           ship.splice(i, 1);

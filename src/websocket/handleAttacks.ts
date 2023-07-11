@@ -17,9 +17,10 @@ export function handleAttaks(parsedData: any, userID: number) {
       x: JSON.parse(parsedData.data).x,
       y: JSON.parse(parsedData.data).y
     },
-    currentPlayerIndex: userID,
+    currentPlayer: userID,
     status: handleShootStatus(competitorId, JSON.parse(parsedData.data))
   };
+
   const newAttack = {
     type: 'attack',
     data: JSON.stringify(innerData),
@@ -29,7 +30,7 @@ export function handleAttaks(parsedData: any, userID: number) {
 
   const dataToSend = JSON.stringify(newAttack);
   const res = {
-    playerId: competitorId,
+    playerId: userID,
     data: dataToSend
   };
   return res;
