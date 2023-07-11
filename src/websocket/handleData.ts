@@ -67,6 +67,7 @@ export function handleData(data: string, userID: number) {
     case 'attack':
       returnedData.length = 0;
       isKilledShip.setIsKilled(false);
+      setIsRandom(false);
       if (turnUserId === userID) {
         returnedData.push(handleAttaks(parsedData, userID, getIsRandom()));
         getNeighbourCells(isKilledShip.getIsKilled()).forEach((pos, i) => {
