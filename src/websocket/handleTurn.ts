@@ -1,4 +1,4 @@
-import { turns, games, setTurnUserId, users } from './variables';
+import { turns, setTurnUserId, users } from './variables';
 
 export function handleTurn(prsedData: any) {
   const currentUserAttack = JSON.parse(prsedData.data).indexPlayer;

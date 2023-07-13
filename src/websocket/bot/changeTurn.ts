@@ -1,4 +1,4 @@
-import { placedShips, setTurnUserId, turnUserId } from '../variables';
+import { setTurnUserId, turnUserId } from '../variables';
 
 export function changeTurnWithBot(id: number) {
   setTurnUserId(id);

@@ -1,5 +1,4 @@
 import { Position } from '../models';
-import { getNeighbourCells } from './getNeighbourCells';
 import { isKilledShip } from './isKilled';
 import { allShipsData, setCurrentShootStatus } from './variables';
 

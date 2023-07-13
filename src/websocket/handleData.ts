@@ -29,7 +29,7 @@ import { handleFirstTurnWithBot } from './bot/handleFirstTurn';
 import { changeTurnWithBot } from './bot/changeTurn';
 import { botAttak } from './bot/botAttack';
 
-export async function handleData(data: string, userID: number) {
+export function handleData(data: string, userID: number) {
   return new Promise((resolve) => {
     const parsedData: any = JSON.parse(data);
     let returnedData: any = [];
@@ -87,7 +87,6 @@ export async function handleData(data: string, userID: number) {
           };
 
           placedShips.push(botShips, userShips);
-          console.log(placedShips.length);
 
           allShipsData.push(
             createShipsData(userShips),
@@ -110,14 +109,13 @@ export async function handleData(data: string, userID: number) {
           if (turnUserId === userID) {
             returnedData.push(handleAttaks(parsedData, userID, getIsRandom()));
             getNeighbours(returnedData, userID);
-
+            checkWinner(returnedData);
             if (currentShootStatus === 'miss') {
               isKilledShip.setIsKilled(false);
               returnedData.push(handleTurn(parsedData));
             }
+            resolve(returnedData);
           }
-          checkWinner(returnedData);
-          resolve(returnedData);
           break;
         } else if (isSingleGame.gettIsSingleGame()) {
           setIsRandom(false);

@@ -18,7 +18,7 @@ export function getNeighbourCells(ship: Position[]) {
       }
     }
   }
-  // Remove ship cells from neighbours
+
   const uniqueNeighbours = neighbours.filter(({ x, y }) => {
     return !ship.some((pos) => pos.x === x && pos.y === y);
   });

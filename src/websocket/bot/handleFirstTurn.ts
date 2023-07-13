@@ -1,5 +1,4 @@
 import { setTurnUserId } from '../variables';
-import { isSingleGame } from './botClass';
 
 export function handleFirstTurnWithBot(userId: any) {
   setTurnUserId(userId);

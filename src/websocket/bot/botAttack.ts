@@ -3,9 +3,6 @@ import { placedShips } from '../variables';
 import { isSingleGame } from './botClass';
 
 export function botAttak(competitorId: number) {
-  const competitorShips = placedShips.find((playerShips) => {
-    return playerShips.id === competitorId;
-  });
   const xPosition = Math.floor(Math.random() * 10);
   const yPosition = Math.floor(Math.random() * 10);
   const position = { x: xPosition, y: yPosition, state: 'alive' };
