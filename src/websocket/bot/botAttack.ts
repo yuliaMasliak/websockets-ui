@@ -6,13 +6,16 @@ export function botAttak(competitorId: number) {
   const competitorShips = placedShips.find((playerShips) => {
     return playerShips.id === competitorId;
   });
+  const xPosition = Math.floor(Math.random() * 10);
+  const yPosition = Math.floor(Math.random() * 10);
+  const position = { x: xPosition, y: yPosition, state: 'alive' };
   let innerData = {
     position: {
-      x: Math.floor(Math.random() * 10),
-      y: Math.floor(Math.random() * 10)
+      x: xPosition,
+      y: yPosition
     },
     currentPlayer: isSingleGame.id,
-    status: handleShootStatus(competitorId, competitorShips?.ships!)
+    status: handleShootStatus(competitorId, position)
   };
 
   const newAttack = {
@@ -20,12 +23,12 @@ export function botAttak(competitorId: number) {
     data: JSON.stringify(innerData),
     id: 0
   };
-  //   console.log('from botattack' + competitorId);
-  //   console.log(innerData);
+
   const dataToSend = JSON.stringify(newAttack);
+
   const res = {
     playerId: competitorId,
     data: dataToSend
   };
-  return res;
+  return dataToSend;
 }

@@ -29,8 +29,6 @@ import { handleFirstTurnWithBot } from './bot/handleFirstTurn';
 import { changeTurnWithBot } from './bot/changeTurn';
 import { botAttak } from './bot/botAttack';
 
-import { handleAttaksSinglePlay } from './bot/handleAttacksSingleGame';
-
 export async function handleData(data: string, userID: number) {
   return new Promise((resolve) => {
     const parsedData: any = JSON.parse(data);
@@ -77,37 +75,42 @@ export async function handleData(data: string, userID: number) {
             returnedData.push(handleTurn(parsedData));
           }
         } else {
+          returnedData.length = 0;
           const botShips = {
             id: isSingleGame.id,
             ships: isSingleGame.ships
           };
-          returnedData.length = 0;
+
           const userShips = {
             id: userID,
             ships: JSON.parse(parsedData.data).ships
           };
 
           placedShips.push(botShips, userShips);
+          console.log(placedShips.length);
+
           allShipsData.push(
             createShipsData(userShips),
             createShipsData(botShips)
           );
-          returnedData.push(handleStartGame(userShips, 0));
+          placedShips.forEach((userPlacedShips: any, i: number) => {
+            returnedData.push(handleStartGame(userPlacedShips, i));
+          });
           returnedData.push(handleFirstTurnWithBot(userID));
         }
         resolve(returnedData);
         break;
       case 'attack':
-        console.log(allShipsData.length);
         returnedData.length = 0;
         isKilledShip.setIsKilled(false);
         setIsRandom(false);
+
+        //Mutual game
         if (!isSingleGame.gettIsSingleGame()) {
           if (turnUserId === userID) {
             returnedData.push(handleAttaks(parsedData, userID, getIsRandom()));
-            getNeighbourCells(isKilledShip.getIsKilled()).forEach((pos, i) => {
-              returnedData.push(handleNeighbourCellsOpen(pos, i, userID));
-            });
+            getNeighbours(returnedData, userID);
+
             if (currentShootStatus === 'miss') {
               isKilledShip.setIsKilled(false);
               returnedData.push(handleTurn(parsedData));
@@ -117,33 +120,34 @@ export async function handleData(data: string, userID: number) {
           resolve(returnedData);
           break;
         } else if (isSingleGame.gettIsSingleGame()) {
-          console.log('bot play');
           setIsRandom(false);
+          //Game with bot
           if (turnUserId !== isSingleGame.id) {
-            console.log('not bot turn');
-
-            returnedData.push(
-              handleAttaksSinglePlay(parsedData, userID, getIsRandom())
-            );
-
-            getNeighbourCells(isKilledShip.getIsKilled()).forEach((pos, i) => {
-              returnedData.push(
-                handleNeighbourCellsOpen(pos, i, allShipsData[0].ownerId)
-              );
-            });
+            returnedData.push(handleAttaks(parsedData, userID, getIsRandom()));
+            getNeighbours(returnedData, userID);
             if (currentShootStatus === 'miss') {
               isKilledShip.setIsKilled(false);
-              returnedData.push(changeTurnWithBot(isSingleGame.id));
-              setTimeout(() => {
-                returnedData.push(botAttak(userID));
-                resolve(returnedData);
-              }, 2000);
+              returnedData.push(handleTurn(parsedData));
             }
-          } else {
-            console.log('bot turn');
-            returnedData.push(botAttak(userID));
-            returnedData.push(changeTurnWithBot(userID));
+            checkWinner(returnedData);
             resolve(returnedData);
+          }
+          if (turnUserId === isSingleGame.id) {
+            botAttack();
+
+            function botAttack() {
+              // setTimeout(() => {
+              returnedData.push(botAttak(userID));
+              if (currentShootStatus === 'miss') {
+                isKilledShip.setIsKilled(false);
+                returnedData.push(changeTurnWithBot(userID));
+                resolve(returnedData);
+              } else {
+                botAttack();
+                checkWinner(returnedData);
+              }
+              // }, 2000);
+            }
           }
         }
         break;
@@ -157,27 +161,12 @@ export async function handleData(data: string, userID: number) {
           isKilledShip.setIsKilled(false);
           returnedData.push(handleTurn(parsedData));
         }
-        allShipsData.forEach((player, i) => {
-          if (
-            player.ships.every((ship) => {
-              return ship.every((pos: Position) => {
-                return pos.state === 'dead';
-              });
-            })
-          ) {
-            allShipsData.splice(i, 1);
-            updateWinners(allShipsData[0].ownerId);
-            returnedData.push(handleWinner(allShipsData[0].ownerId));
-            getNeighbourCells(isKilledShip.getIsKilled()).forEach((pos, i) => {
-              returnedData.push(
-                handleNeighbourCellsOpen(pos, i, allShipsData[0].ownerId)
-              );
-            });
-            rooms.length = 0;
-            allShipsData.length = 0;
-            returnedData.push(clearRooms());
-          }
-        });
+        checkWinner(returnedData);
+        getNeighbours(returnedData, userID);
+        rooms.length = 0;
+        allShipsData.length = 0;
+        returnedData.push(clearRooms());
+
         resolve(returnedData);
         break;
       case 'single_play':
@@ -201,6 +190,12 @@ export async function handleData(data: string, userID: number) {
   });
 }
 
+function getNeighbours(returnedData: any, id: number) {
+  getNeighbourCells(isKilledShip.getIsKilled()).forEach((pos, i) => {
+    returnedData.push(handleNeighbourCellsOpen(pos, i, id));
+  });
+}
+
 function checkWinner(returnedData: any) {
   allShipsData.forEach((player, i) => {
     if (
@@ -213,11 +208,7 @@ function checkWinner(returnedData: any) {
       allShipsData.splice(i, 1);
       updateWinners(allShipsData[0].ownerId);
       returnedData.push(handleWinner(allShipsData[0].ownerId));
-      // getNeighbourCells(isKilledShip.getIsKilled()).forEach((pos, i) => {
-      //   returnedData.push(
-      //     handleNeighbourCellsOpen(pos, i, allShipsData[0].ownerId)
-      //   );
-      // });
+
       rooms.length = 0;
       placedShips.length = 0;
       allShipsData.length = 0;

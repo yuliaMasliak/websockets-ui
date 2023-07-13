@@ -3,8 +3,6 @@ import { placedShips, setTurnUserId, turnUserId } from '../variables';
 export function changeTurnWithBot(id: number) {
   setTurnUserId(id);
 
-  console.log('from turn currentTurn:' + turnUserId);
-
   const innerData = {
     currentPlayer: turnUserId
   };
@@ -16,6 +14,10 @@ export function changeTurnWithBot(id: number) {
   };
 
   const dataToSend = JSON.stringify(newTurn);
+  const res = {
+    playerId: turnUserId,
+    data: dataToSend
+  };
 
-  return dataToSend;
+  return res;
 }

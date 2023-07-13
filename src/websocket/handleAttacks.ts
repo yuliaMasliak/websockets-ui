@@ -20,6 +20,7 @@ export function handleAttaks(parsedData: any, userID: number, random: boolean) {
     currentPlayer: userID,
     status: handleShootStatus(competitorId, JSON.parse(parsedData.data))
   };
+
   if (random) {
     const data = {
       x: Math.floor(Math.random() * 10),

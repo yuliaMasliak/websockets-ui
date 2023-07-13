@@ -13,7 +13,7 @@ class Bot {
     { position: { x: 7, y: 8 }, direction: true, type: 'small', length: 1 },
     { position: { x: 9, y: 8 }, direction: false, type: 'small', length: 1 }
   ];
-
+  shoots: any = [];
   setIsSingleGame(value: boolean) {
     this.isSingleGame = value;
   }

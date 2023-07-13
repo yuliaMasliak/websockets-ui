@@ -8,10 +8,10 @@ export function handleShootStatus(
   shotPosition: Position
 ): string {
   let result = 'miss';
-  const competotrShips = allShipsData.find((el) => el.ownerId == competitorId);
+  const competitorShips = allShipsData.find((el) => el.ownerId == competitorId);
 
-  if (competotrShips) {
-    competotrShips.ships.forEach((ship) => {
+  if (competitorShips) {
+    competitorShips.ships.forEach((ship) => {
       ship.forEach((pos: Position, i: number) => {
         if (pos.x === shotPosition.x && pos.y === shotPosition.y) {
           pos.state = 'dead';
