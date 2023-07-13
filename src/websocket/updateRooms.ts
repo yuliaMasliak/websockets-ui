@@ -3,8 +3,6 @@ import { rooms } from './db';
 
 export function updateExistingRooms(parsedData: any = '', userId: number = 0) {
   if (parsedData && userId !== 0) {
-    console.log(parsedData);
-
     const user = users.find((user) => user.index === userId);
     rooms.forEach((room) => {
       if (room.roomId === JSON.parse(parsedData.data).indexRoom) {

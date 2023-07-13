@@ -24,7 +24,7 @@ wss.on('connection', function connection(ws: WebSocket & { userID: number }) {
 
   ws.on('error', console.error);
 
-  ws.on('message', function message(data: string) {
+  ws.on('message', async function message(data: string) {
     console.log(`Received message ${data}`);
 
     const parsedData: any = JSON.parse(data);
@@ -52,7 +52,8 @@ wss.on('connection', function connection(ws: WebSocket & { userID: number }) {
       }
     } else {
       if (data !== null) {
-        handleData(data, ws.userID).forEach((el: any) => {
+        const dataToProcess: any = await handleData(data, ws.userID);
+        dataToProcess.forEach((el: any) => {
           if (el.playerId) {
             connections.forEach((connection) => {
               if (el.playerId === connection.userID) {

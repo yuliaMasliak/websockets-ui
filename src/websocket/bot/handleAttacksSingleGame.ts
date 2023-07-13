@@ -1,16 +1,13 @@
-import { placedShips, turns } from './variables';
-import { handleShootStatus } from './handleShootStatus';
+import { handleShootStatus } from '../handleShootStatus';
+import { isSingleGame } from './botClass';
 
-export function handleAttaks(parsedData: any, userID: number, random: boolean) {
-  let competitorId: number = 0;
-
-  placedShips.forEach((ships, i) => {
-    if (ships.id === userID) {
-      const copy = [...placedShips];
-      copy.splice(i, 1);
-      competitorId = copy[0].id;
-    }
-  });
+export function handleAttaksSinglePlay(
+  parsedData: any,
+  userID: number,
+  random: boolean
+) {
+  let competitorId = isSingleGame.id;
+  console.log('from attack: ' + competitorId);
 
   let innerData = {
     position: {
@@ -36,13 +33,10 @@ export function handleAttaks(parsedData: any, userID: number, random: boolean) {
     data: JSON.stringify(innerData),
     id: parsedData.id
   };
-  turns.push(parsedData.id);
+
+  //   console.log(innerData);
 
   const dataToSend = JSON.stringify(newAttack);
 
-  const res = {
-    playerId: userID,
-    data: dataToSend
-  };
-  return res;
+  return dataToSend;
 }
