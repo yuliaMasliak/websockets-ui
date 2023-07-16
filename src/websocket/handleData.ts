@@ -28,6 +28,7 @@ import { isSingleGame } from './bot/botClass';
 import { handleFirstTurnWithBot } from './bot/handleFirstTurn';
 import { changeTurnWithBot } from './bot/changeTurn';
 import { botAttak } from './bot/botAttack';
+import { connections } from '../../index';
 
 export function handleData(data: string, userID: number) {
   return new Promise((resolve) => {
@@ -67,6 +68,7 @@ export function handleData(data: string, userID: number) {
           };
           placedShips.push(userShips);
           allShipsData.push(createShipsData(userShips));
+          console.log(placedShips.length);
 
           if (placedShips.length === 2) {
             placedShips.forEach((userPlacedShips: any, i: number) => {
@@ -99,14 +101,13 @@ export function handleData(data: string, userID: number) {
         }
         resolve(returnedData);
         break;
-      case 'attack':
-        returnedData.length = 0;
-        isKilledShip.setIsKilled(false);
-        setIsRandom(false);
 
-        //Mutual game
+      case 'attack':
         if (!isSingleGame.gettIsSingleGame()) {
           if (turnUserId === userID) {
+            returnedData.length = 0;
+            isKilledShip.setIsKilled(false);
+            setIsRandom(false);
             returnedData.push(handleAttaks(parsedData, userID, getIsRandom()));
             getNeighbours(returnedData, userID);
             checkWinner(returnedData);
@@ -116,37 +117,27 @@ export function handleData(data: string, userID: number) {
             }
             resolve(returnedData);
           }
-          break;
-        } else if (isSingleGame.gettIsSingleGame()) {
-          setIsRandom(false);
-          //Game with bot
-          if (turnUserId !== isSingleGame.id) {
+        }
+        //Game with bot
+        else if (isSingleGame.gettIsSingleGame()) {
+          if (turnUserId === userID) {
+            returnedData.length = 0;
+            isKilledShip.setIsKilled(false);
+            setIsRandom(false);
+            console.log(turnUserId);
             returnedData.push(handleAttaks(parsedData, userID, getIsRandom()));
             getNeighbours(returnedData, userID);
             if (currentShootStatus === 'miss') {
               isKilledShip.setIsKilled(false);
               returnedData.push(handleTurn(parsedData));
+              provideBotAttack(userID);
             }
             checkWinner(returnedData);
             resolve(returnedData);
           }
-          if (turnUserId === isSingleGame.id) {
-            botAttack();
-
-            function botAttack() {
-              // setTimeout(() => {
-              returnedData.push(botAttak(userID));
-              if (currentShootStatus === 'miss') {
-                isKilledShip.setIsKilled(false);
-                returnedData.push(changeTurnWithBot(userID));
-                resolve(returnedData);
-              } else {
-                botAttack();
-                checkWinner(returnedData);
-              }
-              // }, 2000);
-            }
-          }
+          // if (turnUserId === isSingleGame.id) {
+          //   provideBotAttack(userID);
+          // }
         }
         break;
       case 'randomAttack':
@@ -213,4 +204,45 @@ function checkWinner(returnedData: any) {
       returnedData.push(clearRooms());
     }
   });
+}
+
+function provideBotAttack(userID: number) {
+  setTimeout(() => {
+    connections.forEach((connection) => {
+      if (userID === connection.userID) {
+        connection.send(botAttak(userID));
+      }
+    });
+    if (currentShootStatus === 'miss') {
+      isKilledShip.setIsKilled(false);
+      connections.forEach((connection) => {
+        if (userID === connection.userID) {
+          connection.send(changeTurnWithBot(userID));
+        }
+      });
+    } else {
+      provideBotAttack(userID);
+      allShipsData.forEach((player, i) => {
+        if (
+          player.ships.every((ship) => {
+            return ship.every((pos: Position) => {
+              return pos.state === 'dead';
+            });
+          })
+        ) {
+          allShipsData.splice(i, 1);
+          updateWinners(allShipsData[0].ownerId);
+          connections.forEach((connection) => {
+            if (userID === connection.userID) {
+              connection.send(handleWinner(allShipsData[0].ownerId));
+              connection.send(clearRooms());
+            }
+          });
+          rooms.length = 0;
+          placedShips.length = 0;
+          allShipsData.length = 0;
+        }
+      });
+    }
+  }, 2000);
 }

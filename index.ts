@@ -2,6 +2,7 @@ import { handleData } from './src/websocket/handleData';
 import { WebSocketServer, WebSocket } from 'ws';
 import {
   connectionCount,
+  placedShips,
   setCommectionsCout,
   users
 } from './src/websocket/variables';
@@ -12,7 +13,7 @@ import { handleUsers } from './src/websocket/handleUsers';
 import { sendUpdatedWinners } from './src/websocket/sendWinners';
 import { updateExistingRooms } from './src/websocket/updateRooms';
 import { validateUser } from './src/websocket/validateUser';
-let connections: Connection[] = [];
+export let connections: Connection[] = [];
 
 export const wss = new WebSocketServer({ server: httpServer });
 
@@ -83,6 +84,11 @@ wss.on('connection', function connection(ws: WebSocket & { userID: number }) {
     users.forEach((user, i) => {
       if (user.index === ws.userID) {
         users.splice(i, 1);
+      }
+    });
+    placedShips.forEach((player, i) => {
+      if (player.id === ws.userID) {
+        placedShips.splice(i, 1);
       }
     });
 

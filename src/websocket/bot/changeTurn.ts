@@ -19,5 +19,5 @@ export function changeTurnWithBot(id: number) {
     data: dataToSend
   };
 
-  return res;
+  return dataToSend;
 }
