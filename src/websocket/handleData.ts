@@ -124,7 +124,6 @@ export function handleData(data: string, userID: number) {
             returnedData.length = 0;
             isKilledShip.setIsKilled(false);
             setIsRandom(false);
-            console.log(turnUserId);
             returnedData.push(handleAttaks(parsedData, userID, getIsRandom()));
             getNeighbours(returnedData, userID);
             if (currentShootStatus === 'miss') {
@@ -135,9 +134,6 @@ export function handleData(data: string, userID: number) {
             checkWinner(returnedData);
             resolve(returnedData);
           }
-          // if (turnUserId === isSingleGame.id) {
-          //   provideBotAttack(userID);
-          // }
         }
         break;
       case 'randomAttack':
@@ -244,5 +240,5 @@ function provideBotAttack(userID: number) {
         }
       });
     }
-  }, 2000);
+  }, 1500);
 }
