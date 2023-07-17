@@ -1,5 +1,4 @@
 import { handleShootStatus } from '../handleShootStatus';
-import { placedShips } from '../variables';
 import { isSingleGame } from './botClass';
 
 export function botAttak(competitorId: number) {

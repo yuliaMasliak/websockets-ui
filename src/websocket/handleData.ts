@@ -29,6 +29,7 @@ import { handleFirstTurnWithBot } from './bot/handleFirstTurn';
 import { changeTurnWithBot } from './bot/changeTurn';
 import { botAttak } from './bot/botAttack';
 import { connections } from '../../index';
+import { handleWinnerBotGame } from './bot/handleWinnerBot';
 
 export function handleData(data: string, userID: number) {
   return new Promise((resolve) => {
@@ -190,9 +191,14 @@ function checkWinner(returnedData: any) {
         });
       })
     ) {
-      allShipsData.splice(i, 1);
-      updateWinners(allShipsData[0].ownerId);
-      returnedData.push(handleWinner(allShipsData[0].ownerId));
+      const copy = [...allShipsData];
+      copy.splice(i, 1);
+      updateWinners(copy[0].ownerId);
+      if (isSingleGame.gettIsSingleGame()) {
+        returnedData.push(handleWinnerBotGame(copy[0].ownerId));
+      } else {
+        returnedData.push(handleWinner(copy[0].ownerId));
+      }
 
       rooms.length = 0;
       placedShips.length = 0;
@@ -226,13 +232,17 @@ function provideBotAttack(userID: number) {
             });
           })
         ) {
-          allShipsData.splice(i, 1);
-          updateWinners(allShipsData[0].ownerId);
+          const copy = [...allShipsData];
+          copy.splice(i, 1);
+
+          updateWinners(copy[0].ownerId);
           connections.forEach((connection) => {
-            if (userID === connection.userID) {
-              connection.send(handleWinner(allShipsData[0].ownerId));
-              connection.send(clearRooms());
-            }
+            allShipsData.forEach((data) => {
+              if (data.ownerId === connection.userID) {
+                connection.send(handleWinnerBotGame(copy[0].ownerId).data);
+                connection.send(clearRooms());
+              }
+            });
           });
           rooms.length = 0;
           placedShips.length = 0;

@@ -1,4 +1,4 @@
-export function handleWinner(winnerID: number) {
+export function handleWinnerBotGame(winnerID: number) {
   const innerData = {
     winPlayer: winnerID
   };
@@ -8,6 +8,9 @@ export function handleWinner(winnerID: number) {
     id: 0
   };
   const dataToSend = JSON.stringify(winner);
-
-  return dataToSend;
+  const res = {
+    playerId: winnerID,
+    data: dataToSend
+  };
+  return res;
 }
